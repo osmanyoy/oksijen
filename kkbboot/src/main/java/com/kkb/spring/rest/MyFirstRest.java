@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.annotation.RequestScope;
 
+import com.kkb.spring.configuration.MyConfigurationObj;
 import com.kkb.xyz.ExecuteV4;
 import com.kkb.xyz.IExecute;
 import com.kkb.xyz.PersonManager;
@@ -31,17 +33,26 @@ import com.kkb.xyz.PersonManager;
 public class MyFirstRest {
 
     @Autowired
-    private PersonManager pm;
+    private MyConfigurationObj myConf;
+
+    @Autowired
+    private PersonManager      pm;
 
     @Autowired(required = false)
     //@Qualifier("v3")
     @ExecuteV4
-    private IExecute      test;
+    private IExecute           test;
 
     // @RequestMapping(path = "/hello", method = RequestMethod.GET)
     @GetMapping("/hello")
     public String hello() {
         return "Hello " + this.pm.getName();
+    }
+
+    @GetMapping("/conf")
+    public String conf() {
+
+        return this.myConf.toString();
     }
 
     @GetMapping("/execute")
@@ -110,6 +121,28 @@ public class MyFirstRest {
         ErrorObj errorObjLoc = new ErrorObj();
         errorObjLoc.setMsg(myValidationExceptionParam.getMsg());
         return errorObjLoc;
+    }
+
+    @PostMapping(value = "/test4",
+                 consumes = {
+                              MediaType.APPLICATION_JSON_VALUE,
+                              MediaType.APPLICATION_XML_VALUE
+                 },
+                 produces = {
+                              MediaType.APPLICATION_JSON_VALUE,
+                              MediaType.APPLICATION_XML_VALUE
+                 })
+    public ResponseEntity<?> test4(@RequestBody final Employee emp) {
+        if (emp.getName()
+               .length() < 2) {
+            ErrorObj errorObjLoc = new ErrorObj();
+            errorObjLoc.setMsg("2 den küçük olamaz");
+            ResponseEntity<ErrorObj> bodyLoc = ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                                             .body(errorObjLoc);
+            return bodyLoc;
+        }
+        return ResponseEntity.ok(emp);
+
     }
 
 }

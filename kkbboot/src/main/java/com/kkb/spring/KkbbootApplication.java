@@ -7,6 +7,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Import;
 
@@ -17,6 +18,7 @@ import com.kkb.xyz.PersonManager;
 //                                            "com.kkb.spring",
 //                                            "com.kkb.xyz"
 //})
+@EnableConfigurationProperties
 @SpringBootApplication
 @Import(PersonConfiguration.class)
 public class KkbbootApplication implements ApplicationRunner {

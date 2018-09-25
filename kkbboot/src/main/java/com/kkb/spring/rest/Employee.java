@@ -9,6 +9,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.kkb.spring.validation.StrSize;
+
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Employee {
@@ -23,6 +25,7 @@ public class Employee {
     @Max(120)
     private int    age;
 
+    @StrSize(maxStr = 15, minStr = 7)
     private String phone;
     private String dep;
 
