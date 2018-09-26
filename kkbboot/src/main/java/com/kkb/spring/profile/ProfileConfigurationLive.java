@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Profile;
 public class ProfileConfigurationLive {
 
     @Bean
-    public IProfileTest profTest() {
+    public IProfileTest profTest2() {
         return new ProfileTest2();
     }
 
