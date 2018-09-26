@@ -25,11 +25,5 @@ public class ConditionConfiguration {
         return new ExecuteImpl2();
     }
 
-    @MyConditionAnno(test = "osman")
-    @Bean
-    @Qualifier("abc3")
-    public IExecute exec3() {
-        return new ExecuteImpl2();
-    }
 
 }
