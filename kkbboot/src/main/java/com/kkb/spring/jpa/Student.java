@@ -44,8 +44,8 @@ public abstract class Student {
     @AttributeOverride(column = @Column(name = "mysehir", length = 20), name = "city")
     private Address  addr;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "student")
-    @JoinColumn(nullable = false)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(nullable = true)
     private Identity identity;
 
     @Version
