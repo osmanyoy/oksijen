@@ -6,9 +6,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ldap.embedded.EmbeddedLdapProperties.Credential;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -28,6 +30,10 @@ import com.kkb.xyz.ExecuteV4;
 import com.kkb.xyz.IExecute;
 import com.kkb.xyz.PersonManager;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 @RequestScope
 public class MyFirstRest {
@@ -45,11 +51,13 @@ public class MyFirstRest {
 
     // @RequestMapping(path = "/hello", method = RequestMethod.GET)
     @GetMapping("/hello")
-    public String hello() {
+    //@PreAuthorize("hasRole('ADMIN')")
+    public String hello(final Credential credentialParam) {
         return "Hello " + this.pm.getName();
     }
 
     @GetMapping("/conf")
+    @PreAuthorize("hasRole('ADMIN')")
     public String conf() {
 
         return this.myConf.toString();
@@ -61,6 +69,9 @@ public class MyFirstRest {
     }
 
     @GetMapping("/test/{isim}/{soyisim}")
+    @ApiResponses({
+                    @ApiResponse(code = 427, message = "Test api response")
+    })
     public String test1(@PathVariable("isim") final String name,
                         @PathVariable("soyisim") final String surname,
                         @RequestParam("yas") final int age,
@@ -132,6 +143,10 @@ public class MyFirstRest {
                               MediaType.APPLICATION_JSON_VALUE,
                               MediaType.APPLICATION_XML_VALUE
                  })
+    @ApiResponses({
+                    @ApiResponse(code = 444, message = "Error 1", response = ErrorObj.class)
+    })
+    @ApiOperation(value = "sum of description", notes = "Employee alır verir", response = Employee.class)
     public ResponseEntity<?> test4(@RequestBody final Employee emp) {
         if (emp.getName()
                .length() < 2) {
