@@ -11,7 +11,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(final HttpSecurity httpSecurityParam) throws Exception {
         httpSecurityParam.authorizeRequests()
                          .antMatchers("/actuator/**")
-                         .anonymous()
+                         .permitAll()
                          .antMatchers("/act/**")
                          .hasAnyRole("USER")
                          .anyRequest()
