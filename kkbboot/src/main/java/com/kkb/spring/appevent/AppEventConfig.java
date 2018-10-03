@@ -11,6 +11,7 @@ import org.springframework.context.event.SimpleApplicationEventMulticaster;
 @Configuration
 public class AppEventConfig {
 
+    @Bean
     public Executor execForMulticastEvent() {
         return Executors.newFixedThreadPool(3);
     }

@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.annotation.RequestScope;
 
+import com.kkb.spring.aop.MyAnnoTest;
 import com.kkb.spring.configuration.MyConfigurationObj;
 import com.kkb.xyz.ExecuteV4;
 import com.kkb.xyz.IExecute;
@@ -50,6 +51,7 @@ public class MyFirstRest {
     private IExecute           test;
 
     // @RequestMapping(path = "/hello", method = RequestMethod.GET)
+    @MyAnnoTest(testStr = "test")
     @GetMapping("/hello")
     //@PreAuthorize("hasRole('ADMIN')")
     public String hello(final Credential credentialParam) {
