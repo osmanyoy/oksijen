@@ -13,10 +13,12 @@ import com.kkb.spring.models.Customer;
 
 public class CustomerManager {
 
-    private final Map<Long, Customer> customerCache = new HashMap<>();
+    private final Map<String, Customer> customerCache = new HashMap<>();
 
     @Autowired
-    private ICustomerFormatter        formatter;
+    private ICustomerFormatter          formatter;
+
+    private ICustomerDAO                customerDAO;
 
 
     public CustomerManager() {
@@ -24,9 +26,11 @@ public class CustomerManager {
 
     @Autowired
     public void init(final ICustomerDAO customerDAOParam) {
+        this.customerDAO = customerDAOParam;
         List<Customer> allCustomersLoc = customerDAOParam.getAllCustomers();
         for (Customer customerLoc : allCustomersLoc) {
-            this.customerCache.put(customerLoc.getId(),
+            this.customerCache.put(customerLoc.getCredential()
+                                              .getUsername(),
                                    customerLoc);
         }
     }
@@ -36,11 +40,28 @@ public class CustomerManager {
     }
 
     public String formatCustomer(final long custId) {
-        Customer customerLoc = this.customerCache.get(custId);
-        if (customerLoc == null) {
-            return "null";
+        Collection<Customer> valuesLoc = this.customerCache.values();
+        Customer foundCustomerLoc = null;
+        for (Customer customerLoc : valuesLoc) {
+            if (customerLoc.getId() == custId) {
+                foundCustomerLoc = customerLoc;
+            }
         }
-        return this.formatter.format(customerLoc);
+        if (foundCustomerLoc == null) {
+            return null;
+        }
+        return this.formatter.format(foundCustomerLoc);
 
+    }
+
+    public void addCustomer(final Customer customerParam) {
+        this.customerDAO.save(customerParam);
+        this.customerCache.put(customerParam.getCredential()
+                                            .getUsername(),
+                               customerParam);
+    }
+
+    public Customer getCustomerByUsername(final String usernameParam) {
+        return this.customerCache.get(usernameParam);
     }
 }

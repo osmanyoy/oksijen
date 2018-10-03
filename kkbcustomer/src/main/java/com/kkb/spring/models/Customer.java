@@ -1,18 +1,27 @@
 package com.kkb.spring.models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
+
 
 @Entity
 public class Customer {
 
     @Id
     @GeneratedValue
-    private long   id;
-    private String name;
-    private String surname;
-    private int    age;
+    private long               id;
+    private String             name;
+    private String             surname;
+    private int                age;
+
+    @NotNull
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "customer")
+    private CustomerCredential credential;
 
     public long getId() {
         return this.id;
@@ -44,6 +53,14 @@ public class Customer {
 
     public void setAge(final int ageParam) {
         this.age = ageParam;
+    }
+
+    public CustomerCredential getCredential() {
+        return this.credential;
+    }
+
+    public void setCredential(final CustomerCredential credentialParam) {
+        this.credential = credentialParam;
     }
 
 
